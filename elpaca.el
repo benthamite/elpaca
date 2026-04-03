@@ -1001,9 +1001,10 @@ ARGS must be a plist including any of the following keywords value pairs:
        (elpaca--make-process ,esym
          :name ,namesym
          :buffer ,namesym
-         :command (list (elpaca--emacs-path) "-Q" "--batch" ,@(plist-get args :args)
-                        "--eval" (format "%S" elpaca-with-emacs-env-form)
-                        "--eval" (format "%S" (macroexp-progn ,formsym)))
+         :command (let ((print-length nil))
+                    (list (elpaca--emacs-path) "-Q" "--batch" ,@(plist-get args :args)
+                          "--eval" (format "%S" elpaca-with-emacs-env-form)
+                          "--eval" (format "%S" (macroexp-progn ,formsym))))
          :sentinel
          (lambda (process event)
            (elpaca--process-sentinel (concat ,namesym " complete") nil process event))))))
